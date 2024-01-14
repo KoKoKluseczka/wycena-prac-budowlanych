@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import RoomList from './components/RoomList';
+import ActivityList from './components/ActivityList';
 
 function App() {
+  // State dla pomieszczeń, czynności, nowego pomieszczenia, nowej czynności, typu powierzchni, id czynności i id pomieszczenia
   const [rooms, setRooms] = useState([]);
   const [activities, setActivities] = useState([]);
   const [newRoom, setNewRoom] = useState({});
@@ -9,7 +12,8 @@ function App() {
   const [surfaceType, setSurfaceType] = useState('floor');
   const [activityId, setActivityId] = useState('');
   const [roomId, setRoomId] = useState('');
-  
+
+  // Pobranie danych na starcie aplikacji
   useEffect(() => {
     axios.get('http://localhost:5000/rooms')
       .then(response => setRooms(response.data))
@@ -18,40 +22,33 @@ function App() {
     axios.get('http://localhost:5000/activities')
       .then(response => setActivities(response.data))
       .catch(error => console.error('Error fetching activities:', error));
-  }, []);
+  }, []); // Pusta tablica oznacza, że useEffect zostanie uruchomiony tylko raz po załadowaniu komponentu
 
+  // Dodawanie nowego pomieszczenia
   const addRoom = () => {
     axios.post('http://localhost:5000/rooms', newRoom)
       .then(response => setRooms([...rooms, response.data]))
       .catch(error => console.error('Error adding room:', error));
   };
 
+  // Dodawanie nowej czynności
   const addActivity = () => {
     axios.post('http://localhost:5000/activities', newActivity)
       .then(response => setActivities([...activities, response.data]))
       .catch(error => console.error('Error adding activity:', error));
   };
 
-  const calculateCost = async (roomId, surfaceType, activityId) => {
-    try {
-      const response = await axios.post('http://localhost:5000/calculateCost', { roomId, surfaceType, activityId });
-      return response.data.cost;
-    } catch (error) {
-      console.error('Error calculating cost:', error);
-      return 0;
-    }
-  };
-
+  // Obliczanie i wyświetlanie kosztu
   const calculateAndDisplayCost = async (roomId, surfaceType, activityId) => {
     try {
-      const cost = await calculateCost(roomId, surfaceType, activityId);
-      console.log('Calculated cost:', cost);
-      // Tutaj możesz zaimplementować logikę do wyświetlenia kosztu
+      const response = await axios.post('http://localhost:5000/calculateCost', { roomId, surfaceType, activityId });
+      console.log('Calculated cost:', response.data.cost);
     } catch (error) {
       console.error('Error calculating and displaying cost:', error);
     }
   };
 
+  // Renderowanie komponentu
   return (
     <div>
       <h1>Wycena Prac Budowlanych</h1>
@@ -70,6 +67,16 @@ function App() {
         <input type="text" placeholder="Nazwa" onChange={(e) => setNewActivity({ ...newActivity, name: e.target.value })} />
         <input type="number" placeholder="Koszt za m2" onChange={(e) => setNewActivity({ ...newActivity, costPerSquareMeter: e.target.value })} />
         <button onClick={addActivity}>Dodaj</button>
+      </div>
+
+      <div>
+        <h2>Lista Pomieszczeń</h2>
+        <RoomList rooms={rooms} />
+      </div>
+
+      <div>
+        <h2>Lista Czynności</h2>
+        <ActivityList activities={activities} />
       </div>
 
       <div>

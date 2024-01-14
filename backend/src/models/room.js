@@ -1,5 +1,7 @@
+// Importuj bibliotekę mongoose
 const mongoose = require('mongoose');
 
+// Definiuj schemat dla modelu pomieszczenia
 const roomSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -19,6 +21,8 @@ const roomSchema = new mongoose.Schema({
   },
 });
 
+// Twórz model pomieszczenia na podstawie zdefiniowanego schematu
 const Room = mongoose.model('Room', roomSchema);
 
+// Eksportuj model, aby można go było używać w innych plikach
 module.exports = Room;

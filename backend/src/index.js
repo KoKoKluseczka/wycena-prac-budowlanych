@@ -1,16 +1,17 @@
+// Importy
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
+// Aplikacja Express
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-app.use(cors());
-app.use(bodyParser.json());
-
+// Połączenie z MongoDB
 mongoose.connect('mongodb://localhost:27017/wycena-prac-budowlanych', { useNewUrlParser: true, useUnifiedTopology: true });
 
+// Schemat i model dla pomieszczeń
 const roomSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -32,6 +33,7 @@ const roomSchema = new mongoose.Schema({
 
 const Room = mongoose.model('Room', roomSchema);
 
+// Schemat i model dla czynności
 const activitySchema = new mongoose.Schema({
   name: {
     type: String,
@@ -45,6 +47,11 @@ const activitySchema = new mongoose.Schema({
 
 const Activity = mongoose.model('Activity', activitySchema);
 
+// Middlewares
+app.use(cors());
+app.use(bodyParser.json());
+
+// Endpoint do dodawania pomieszczeń
 app.post('/rooms', async (req, res) => {
   try {
     const room = new Room(req.body);
@@ -55,6 +62,7 @@ app.post('/rooms', async (req, res) => {
   }
 });
 
+// Endpoint do dodawania czynności
 app.post('/activities', async (req, res) => {
   try {
     const activity = new Activity(req.body);
@@ -65,6 +73,7 @@ app.post('/activities', async (req, res) => {
   }
 });
 
+// Endpoint do pobierania pomieszczeń
 app.get('/rooms', async (req, res) => {
   try {
     const rooms = await Room.find();
@@ -74,6 +83,7 @@ app.get('/rooms', async (req, res) => {
   }
 });
 
+// Endpoint do pobierania czynności
 app.get('/activities', async (req, res) => {
   try {
     const activities = await Activity.find();
@@ -83,37 +93,7 @@ app.get('/activities', async (req, res) => {
   }
 });
 
-app.post('/calculateCost', async (req, res) => {
-  try {
-    const { roomId, surfaceType, activityId } = req.body;
-
-    const room = await Room.findById(roomId);
-    const activity = await Activity.findById(activityId);
-
-    if (!room || !activity) {
-      return res.status(404).send('Room or activity not found');
-    }
-
-    let cost = 0;
-
-    switch (surfaceType) {
-      case 'floor':
-        cost = room.length * room.width * activity.costPerSquareMeter;
-        break;
-      case 'wall':
-        cost = 2 * (room.length + room.width) * room.height * activity.costPerSquareMeter;
-        break;
-      case 'ceiling':
-        cost = room.length * room.width * activity.costPerSquareMeter;
-        break;
-      default:
-        return res.status(400).send('Invalid surface type');
-    }
-
-    res.send({ cost });
-  } catch (error) {
-    res.status(500).send(error);
-  }
+// Start serwera
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
-
-app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));

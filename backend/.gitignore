@@ -8,3 +8,5 @@ npm-debug.log
 # Ignorowanie plików związanych z systemem operacyjnym
 .DS_Store
 Thumbs.db
+# Zależności
+package-lock.json

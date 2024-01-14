@@ -15,7 +15,7 @@ build/
 
 # Ignorowanie plików konfiguracyjnych npm
 npm-debug.log
-
+*.log
 # Ignorowanie plików związanych z systemem operacyjnym
 .DS_Store
 Thumbs.db

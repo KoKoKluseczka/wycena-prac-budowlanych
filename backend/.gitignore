@@ -1,0 +1,10 @@
+# Ignorowanie folderu node_modules
+node_modules/
+
+# Ignorowanie plików konfiguracyjnych npm
+npm-debug.log
+*.env
+
+# Ignorowanie plików związanych z systemem operacyjnym
+.DS_Store
+Thumbs.db

@@ -1,0 +1,21 @@
+node_modules/
+build/
+# Ignorowanie plików i folderów utworzonych przez różne IDE
+.vscode/
+.idea/
+*.sublime-*
+*.swp
+.DS_Store
+
+# Ignorowanie plików konfiguracyjnych środowiska
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Ignorowanie plików konfiguracyjnych npm
+npm-debug.log
+
+# Ignorowanie plików związanych z systemem operacyjnym
+.DS_Store
+Thumbs.db

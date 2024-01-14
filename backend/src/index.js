@@ -9,7 +9,12 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Połączenie z MongoDB
-mongoose.connect('mongodb://localhost:27017/wycena-prac-budowlanych', { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect('mongodb://localhost:27017/wycena-prac-budowlanych', { 
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useCreateIndex: true,
+  useFindAndModify: false,
+});
 
 // Schemat i model dla pomieszczeń
 const roomSchema = new mongoose.Schema({

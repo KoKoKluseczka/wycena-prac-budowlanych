@@ -10,7 +10,7 @@
         "eject": "react-scripts eject"
     },
     "keywords": [],
-    "author": "Twoje Imię",
+    "author": "KoKo",
     "license": "ISC",
     "dependencies": {
         "axios": "^0.21.1",
